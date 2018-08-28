@@ -16,6 +16,6 @@ object ScalaJSExample {
 
   def main(args: Array[String]): Unit = {
     dom.document.getElementById("scalajsShoutOut").textContent = SharedMessages.itWorks
-    Hello("Dude!").renderIntoDOM(document.body)
+    Hello("Dude!").renderIntoDOM(dom.document.getElementById("scalajsShoutOut"))
   }
 }

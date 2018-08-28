@@ -17,13 +17,12 @@ import play.api.routing.sird._
 class Application @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
 def versioned(s: String) = controllers.routes.Assets.versioned(s)
-  def index = Action(Ok(AssetsHelper.index("SP-Core", versioned(_))))
-  def serve(file: Asset) = controllers.Assets.versioned(path="/public", file: Asset)
-
+  def index = Action(Ok(AssetsHelper.index2("SP-Core", versioned)))
 }
 
 class TestRouter extends SimpleRouter {
   override def routes: Routes = {
-    case GET(p"/") => Action(Results.Ok("Ok"))
+    case GET(p"/versionedAssets/$file") => Assets.versioned(file)
+    case GET(p"/assets/$file") => Assets.at(file)
   }
 }

@@ -4,7 +4,6 @@
 
 # Home page
 GET        /                             sp.controllers.Application.index
-GET        /test/*file                   sp.controllers.Application.serve(file: Asset)
 
 # Prefix must match `play.assets.urlPrefix`
 GET        /assets/*file                 controllers.Assets.at(file)

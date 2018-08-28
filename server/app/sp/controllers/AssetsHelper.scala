@@ -27,7 +27,10 @@ object AssetsHelper {
     Seq("-opt.js", "-fastopt.js", "-opt-bundle.js", "-fastopt-bundle.js")
       .map(projectName.toLowerCase + _)
       .find(resourceExists)
-      .map(name => scriptTag(getAsset(name)))
+      .map(name => {
+        println(getAsset(name))
+        scriptTag(getAsset(name))
+      })
       .getOrElse("<!-- Could not find bundle -->")
   }
 
@@ -46,6 +49,26 @@ object AssetsHelper {
           <li>From Scala.js: <em id="scalajsShoutOut"></em></li>
         </ul>
           ${AssetsHelper.scalaJsScripts("client", versioned(_).toString, name => getClass.getResource(s"/public/$name") != null)}
+        </body>
+      </html>
+    """)
+  }
+
+  def index2(title: String, versioned: String => Call) = {
+    Html(s"""
+    <!DOCTYPE html>
+      <html>
+        <head>
+          <title>$title</title>
+          <link rel="stylesheet" media="screen" href="/api/versionedAssets/stylesheets/main.css")}">
+          <link rel="shortcut icon" type="image/png" href="/api/versionedAssets/images/favicon.png")}">
+        </head>
+        <body>
+        <h2>Play and Scala.js share a same message</h2>
+        <ul>
+          <li>From Scala.js: <em id="scalajsShoutOut"></em></li>
+        </ul>
+            <script src="/api/versionedAssets/client-fastopt-bundle.js" type="text/javascript"></script>
         </body>
       </html>
     """)
