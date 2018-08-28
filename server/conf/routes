@@ -9,3 +9,5 @@ GET        /test/*file                   sp.controllers.Application.serve(file: 
 # Prefix must match `play.assets.urlPrefix`
 GET        /assets/*file                 controllers.Assets.at(file)
 GET        /versionedAssets/*file        controllers.Assets.versioned(path="/public", file: Asset)
+
+->      /api                        sp.controllers.TestRouter
