@@ -13,15 +13,20 @@ lazy val server = (project in file("server")).settings(commonSettings).settings(
   ),
   // Compile the project before generating Eclipse files, so that generated .scala or .class files for views and routes are present
   EclipseKeys.preTasks := Seq(compile in Compile)
-).enablePlugins(PlayService, PlayLayoutPlugin).
+).enablePlugins(PlayService, PlayLayoutPlugin, WebScalaJSBundlerPlugin).
   dependsOn(sharedJvm)
 
 lazy val client = (project in file("client")).settings(commonSettings).settings(
   scalaJSUseMainModuleInitializer := true,
   libraryDependencies ++= Seq(
-    "org.scala-js" %%% "scalajs-dom" % "0.9.5"
-  )
-).enablePlugins(ScalaJSPlugin, ScalaJSWeb).
+    "org.scala-js" %%% "scalajs-dom" % "0.9.2",
+    "com.github.japgolly.scalajs-react" %%% "core" % "1.2.3"
+  ),
+  npmDependencies in Compile ++= Seq(
+    "react" -> "16.2.0",
+    "react-dom" -> "16.2.0"
+ )
+).enablePlugins(ScalaJSBundlerPlugin, ScalaJSWeb).
   dependsOn(sharedJs)
 
 lazy val shared = crossProject(JSPlatform, JVMPlatform)
@@ -33,7 +38,7 @@ lazy val sharedJs = shared.js
 
 lazy val commonSettings = Seq(
   scalaVersion := "2.12.6",
-  organization := "$organization$"
+  organization := "sequenceplanner"
 )
 
 // loads the server project at sbt startup
