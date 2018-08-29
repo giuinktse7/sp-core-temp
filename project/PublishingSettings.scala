@@ -2,7 +2,7 @@ import sbt.Keys._
 import sbt.{url, _}
 
 object PublishingSettings {
-  lazy val version = "0.9.10"
+  lazy val version = "0.10.1"
 
   lazy val projectName = "sp-core"
   lazy val description = "Sequence Planner (SP) is a micro service architecture for modeling and analyzing automation systems"

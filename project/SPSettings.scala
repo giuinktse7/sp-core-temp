@@ -1,10 +1,12 @@
+
 import sbt.Keys._
-import sbt._
-// import xerial.sbt.Sonatype.autoImport._
+import sbt.{Resolver, _}
+import xerial.sbt.Sonatype.autoImport._
+import com.typesafe.sbt.SbtPgp.autoImport._
 import Dependencies._
 
 object SPSettings {
-  /*
+
 
   lazy val compilerOptions = Seq(
     "-unchecked",
@@ -16,41 +18,16 @@ object SPSettings {
     "-Ypartial-unification"
   )
 
-  lazy val jsDependencies = Def.setting(Seq(
-
-  ))
-
-
-*/
-
-  /*
   lazy val repoResolvers: Seq[Resolver] = Seq(
     Resolver.sonatypeRepo("public"),
     Resolver.typesafeRepo("releases"),
     Resolver.sonatypeRepo("snapshots")
   )
-  */
 
-  lazy val sharedSettings = Seq(
-    name := PublishingSettings.projectName,
-    description := PublishingSettings.description,
-    version := PublishingSettings.version,
-    // resolvers ++= repoResolvers,
-    scalaVersion := versions.scala,
+  lazy val buildAndPublishSettings = Seq(
     organization := PublishingSettings.orgNameFull,
-    libraryDependencies ++= spDependencies.value
-    /*
-    scmInfo := Some(ScmInfo(
-      PublishingSettings.githubSP(PublishingSettings.projectName),
-      PublishingSettings.githubscm(PublishingSettings.projectName)
-    ))*/
-  )
-
-/*
-  lazy val defaultBuildSettings = Seq(
-    name := PublishingSettings.projectName,
-    description  := PublishingSettings.description,
-    version := PublishingSettings.version,
+    homepage     := Some(PublishingSettings.githubSP()),
+    licenses     := PublishingSettings.mitLicense,
     scalaVersion := versions.scala,
     scalacOptions ++= compilerOptions,
     resolvers ++= repoResolvers,
@@ -60,14 +37,7 @@ object SPSettings {
     publishTo := PublishingSettings.pubTo.value,
     pomIncludeRepository := { _ => false },
     sonatypeProfileName := PublishingSettings.groupIdSonatype,
-    developers := ProjectSettings.developers,
-    organization := PublishingSettings.orgNameFull,
-    homepage     := Some(PublishingSettings.githubSP()),
-    licenses     := PublishingSettings.mitLicense,
-    scmInfo := Some(ScmInfo(
-      PublishingSettings.githubSP(PublishingSettings.projectName),
-      PublishingSettings.githubscm(PublishingSettings.projectName)
-    ))
+    developers := List(Developer(id = "kristoferb", name = "kristofer Bengtsson", email = "kristofer.bengtsson@chalmers.se", url   = url("https://github.com/kristoferB")))
   )
-  */
+
 }

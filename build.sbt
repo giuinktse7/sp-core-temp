@@ -2,9 +2,15 @@ import sbtcrossproject.CrossPlugin.autoImport.crossProject
 import sbtcrossproject.CrossType
 import Dependencies._
 
+
+lazy val publishVersion = "testingLocal180829"
+lazy val publishName = "sp-core"
+
 lazy val server = project.in(file("server"))
   .settings(commonSettings)
+  .settings(SPSettings.buildAndPublishSettings)
   .settings(
+    name := publishName + "-server",
     scalaJSProjects := Seq(client),
     pipelineStages in Assets := Seq(scalaJSPipeline),
     pipelineStages := Seq(digest, gzip),
@@ -17,7 +23,9 @@ lazy val server = project.in(file("server"))
 
 lazy val client = project.in(file("client"))
   .settings(commonSettings)
+  .settings(SPSettings.buildAndPublishSettings)
   .settings(
+    name := publishName + "-client",
     scalaJSUseMainModuleInitializer := true,
     libraryDependencies ++= clientDependencies.scala.value,
     npmDependencies in Compile ++= clientDependencies.javascript
@@ -32,8 +40,7 @@ lazy val sharedJvm = shared.jvm
 lazy val sharedJs = shared.js
 
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.6",
-  organization := "sequenceplanner",
+  version := publishVersion,
   libraryDependencies ++= spDependencies.value
 )
 

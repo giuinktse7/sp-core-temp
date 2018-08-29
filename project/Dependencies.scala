@@ -43,7 +43,7 @@ object Dependencies {
     // "com.typesafe.akka" %% "akka-cluster-tools" % versions.akka,
     // "com.typesafe.akka" %% "akka-persistence" % versions.akka,
     // "com.typesafe.akka" %% "akka-persistence-query" % versions.akka,
-    "com.typesafe.akka" %% "akka-stream" % versions.akka,
+    "com.typesafe.akka" %% "akka-stream" % versions.akka
 
     // "org.iq80.leveldb" % "leveldb" % versions.levelDbPort,
     // "org.fusesource.leveldbjni" % "leveldbjni-all" % versions.levelDbJni,
