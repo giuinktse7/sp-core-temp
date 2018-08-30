@@ -3,7 +3,7 @@ import sbtcrossproject.CrossType
 import Dependencies._
 
 
-lazy val publishVersion = "testingLocal180829"
+lazy val publishVersion = "testing180829-SNAPSHOT"
 lazy val publishName = "sp-core"
 
 lazy val server = project.in(file("server"))
@@ -45,4 +45,4 @@ lazy val commonSettings = Seq(
 )
 
 // loads the server project at sbt startup
-onLoad in Global := (onLoad in Global).value andThen {s: State => "project server" :: s}
+//onLoad in Global := (onLoad in Global).value andThen {s: State => "project server" :: s}
