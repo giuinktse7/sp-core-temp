@@ -14,10 +14,11 @@ lazy val server = project.in(file("server"))
     scalaJSProjects := Seq(client),
     pipelineStages in Assets := Seq(scalaJSPipeline),
     pipelineStages := Seq(digest, gzip),
-    triggers scalaJSPipeline when using compile or continuous compilation
+    // triggers scalaJSPipeline when using compile or continuous compilation
     compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
     libraryDependencies ++= serverDependencies
-  ).enablePlugins(PlayService, PlayLayoutPlugin, WebScalaJSBundlerPlugin)
+  )
+  .enablePlugins(PlayService, PlayLayoutPlugin, WebScalaJSBundlerPlugin)
   .disablePlugins(PlayLogback)
   .dependsOn(sharedJvm)
 
@@ -42,8 +43,10 @@ lazy val sharedJs = shared.js
 
 lazy val commonSettings = Seq(
   version := publishVersion,
-  libraryDependencies ++= spDependencies.value
+  libraryDependencies ++= spDependencies.value,
+  webpackBundlingMode in fastOptJS := BundlingMode.LibraryOnly(),
+  webpackBundlingMode in fullOptJS := BundlingMode.Application
 )
 
 // loads the server project at sbt startup
-onLoad in Global := (onLoad in Global).value andThen {s: State => "project server" :: s}
+// onLoad in Global := (onLoad in Global).value andThen {s: State => "project server" :: s}

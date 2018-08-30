@@ -14,5 +14,5 @@ class Application @Inject()(cc: ControllerComponents) extends AbstractController
 
   FrontendCode.test(system)
 
-  def index = Assets.at("index.html")
+  def index = Assets.at("index-dev.html")
 }

@@ -9,7 +9,7 @@ import sp.widget.service.ServiceListWidget
   */
 object Main {
   def main(args: Array[String]): Unit = {
-    println("hi")
+    println("hi5")
     val widget = Widget("ServiceList", ServiceListWidget(), 3, 4)
     WidgetList.addWidgets(List(widget))
 
