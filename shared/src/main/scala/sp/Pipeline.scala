@@ -1,8 +1,8 @@
-package sp.shared
+package sp
 
 import play.api.libs.json.Json
+import sp.Pipe.PipeFormat._
 import sp.domain.{JSFormat, SPValue}
-import sp.shared.Pipe.PipeFormat._
 
 object Pipeline {
   def apply[A: JSFormat]: Pipeline[A] = Pipeline[A]()

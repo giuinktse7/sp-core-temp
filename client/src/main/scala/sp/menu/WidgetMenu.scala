@@ -1,0 +1,43 @@
+package sp.menu
+
+import japgolly.scalajs.react._
+import japgolly.scalajs.react.vdom.html_<^._
+import japgolly.scalajs.react.vdom.all.aria
+import scalacss.ScalaCssReact._
+import sp.circuit.{AddWidget, SPGUICircuit}
+import sp.WidgetList
+import sp.components.{Icon, SPNavbarElements}
+
+object WidgetMenu {
+  case class State(filterText: String = "")
+
+  class Backend($: BackendScope[Unit, State]) {
+    def addWidget(name: String, w: Int, h: Int): Callback =
+      Callback(SPGUICircuit.dispatch(AddWidget(name, w, h)))
+
+    def render(state: State) = {
+      def capturedByFilter(s: String) = s.toLowerCase.contains(state.filterText.toLowerCase)
+      val widgets = WidgetList.list.collect { case widget if capturedByFilter(widget.name) =>
+          SPNavbarElements.dropdownElement(widget.name,
+            addWidget(widget.name, widget.width, widget.height)
+          )
+      }
+
+      val filterBox = SPNavbarElements.TextBox(
+        state.filterText,
+        "Find widget...",
+        s => $.modState(_.copy(filterText = s))
+      )
+
+      SPNavbarElements.dropdown("New widget", filterBox :: widgets)
+    }
+
+  }
+
+  private val component = ScalaComponent.builder[Unit]("WidgetMenu")
+    .initialState(State())
+    .renderBackend[Backend]
+    .build
+
+  def apply() = component()
+}

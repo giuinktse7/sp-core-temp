@@ -1,4 +1,4 @@
-package sp.shared
+package sp
 
 import play.api.libs.json.Json
 import sp.domain.JSFormat

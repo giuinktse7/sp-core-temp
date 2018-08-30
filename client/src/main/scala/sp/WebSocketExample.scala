@@ -3,8 +3,7 @@ package sp
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.html_<^._
 import play.api.libs.json.Json
-import sp.shared.DataAPI._
-import sp.shared.Pipeline
+import DataAPI._
 
 object WebSocketExample {
   import org.scalajs.dom.ext.KeyCode

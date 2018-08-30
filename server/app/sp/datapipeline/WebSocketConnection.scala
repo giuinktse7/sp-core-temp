@@ -4,9 +4,9 @@ import akka.NotUsed
 import akka.stream.scaladsl.{Flow, Source}
 import org.codehaus.jackson.JsonParseException
 import play.api.libs.json.{JsError, JsResult, JsSuccess, Json}
-import sp.shared.Pipe.PipeFormat._
+import sp.Pipe
+import sp.Pipe.PipeFormat._
 import sp.domain.{JSFormat, SPValue}
-import sp.shared.Pipe
 import sp.websocket.HoldWithInitial
 
 object WebSocketConnection {

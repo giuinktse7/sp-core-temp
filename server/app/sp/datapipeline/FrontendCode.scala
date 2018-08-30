@@ -7,8 +7,9 @@ import akka.stream.scaladsl.{Flow, Sink, Source}
 import play.api.libs.json._
 import sp.domain.Logic._
 import sp.domain._
-import sp.shared.DataAPI._
-import sp.shared.{Pipe, Pipeline, TypedPipe}
+import sp.DataAPI._
+import sp.Pipe
+import sp.{Pipeline, TypedPipe}
 
 object FrontendCode {
 

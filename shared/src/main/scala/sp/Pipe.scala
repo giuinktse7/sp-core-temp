@@ -1,4 +1,4 @@
-package sp.shared
+package sp
 
 import play.api.libs.json._
 import sp.domain._

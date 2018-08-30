@@ -9,23 +9,32 @@ object Dependencies {
     val levelDbPort = "0.7"
     val levelDbJni = "1.8"
     val scalaTest = "3.0.5"
-    val scalaJs = "0.9.1"
-    val scalaJsReact = "1.2.3"
+    val scalaJs = "0.9.6"
+    val scalaJsReact = "1.1.0"
+    val diode = "1.1.3"
+    val scalaCss = "0.5.3"
   }
 
   object npmVersions {
     val react = "16.2.0"
+    val reactGridLayout = "0.16.6"
   }
 
   object clientDependencies {
     val scala = Def.setting(Seq(
       "org.scala-js" %%% "scalajs-dom" % versions.scalaJs,
-      "com.github.japgolly.scalajs-react" %%% "core" % versions.scalaJsReact
+      "com.github.japgolly.scalajs-react" %%% "core" % versions.scalaJsReact,
+      "com.github.japgolly.scalajs-react" %%% "extra" % versions.scalaJsReact,
+      "com.github.japgolly.scalacss" %%% "core" % versions.scalaCss,
+      "com.github.japgolly.scalacss" %%% "ext-react" % versions.scalaCss,
+      "io.suzaku" %%% "diode" % versions.diode,
+      "io.suzaku" %%% "diode-react" % versions.diode,
     ))
 
     val javascript = Seq(
       "react" -> npmVersions.react,
-      "react-dom" -> npmVersions.react
+      "react-dom" -> npmVersions.react,
+      "react-grid-layout" -> npmVersions.reactGridLayout
     )
   }
 

@@ -15,7 +15,7 @@ object SPSettings {
     "-language:implicitConversions",
     "-language:postfixOps",
     "-language:higherKinds",
-    "-Ypartial-unification"
+    "-Ypartial-unification",
   )
 
   lazy val repoResolvers: Seq[Resolver] = Seq(
