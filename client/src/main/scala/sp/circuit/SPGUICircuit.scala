@@ -75,42 +75,44 @@ class PresetsHandler[M](modelRW: ModelRW[M, PresetsHandlerScope]) extends Action
 }
 
 class OpenWidgetsHandler[M](modelRW: ModelRW[M, OpenWidgets]) extends ActionHandler(modelRW) {
+  private def combinations[A, B](as: Seq[A], bs: Seq[B]) = for (a <- as; b <- bs) yield (a, b)
+
   override def handle = {
     case AddWidget(widgetType, width, height, id) =>
-      val occupiedGrids = value.xs.values.map(w =>
-        for{x <- w.layout.x to w.layout.x + w.layout.w-1} yield {
-          for{y <- w.layout.y to w.layout.y + w.layout.h-1} yield {
-            (x, y)
-          }
-        }
-      ).flatten.flatten
-      val bestPosition:Int = Stream.from(0).find(i => {
+      println("AddWidget")
+      val occupiedGrids = value.xs.values.flatMap { w =>
+        val xs = w.layout.x until w.layout.w + w.layout.x
+        val ys = w.layout.y until w.layout.h + w.layout.y
+
+        combinations(xs, ys)
+      }
+
+      val bestPosition = Stream.from(0).find(i => {
         val x = i % Dashboard.cols
         val y = i / Dashboard.cols
 
-        val requiredGrids = (for{reqX <- x to x + width -1} yield {
-          for{reqY <- y to y + height-1} yield {
-            (reqX, reqY)
-          }
-        }).toSeq.flatten
+        val xs = x until x + width
+        val ys = y until y + height
+        val requiredGrids = combinations(xs, ys)
+
         requiredGrids.forall(req =>
           occupiedGrids.forall(occ =>
             !(occ._1 == req._1 && occ._2 == req._2 || req._1 >= Dashboard.cols)
           )
         )
       }).get
-      val x:Int = bestPosition % Dashboard.cols
-      val y:Int = bestPosition / Dashboard.cols
-      val newWidget = OpenWidget(
-        id,
-        WidgetLayout(x, y, width, height),
-        widgetType
-      )
+
+      val x = bestPosition % Dashboard.cols
+      val y = bestPosition / Dashboard.cols
+
+      val newWidget = OpenWidget(id, WidgetLayout(x, y, width, height), widgetType)
+      println(s"Widget created: $newWidget")
+
       updated(OpenWidgets(value.xs + (id -> newWidget)))
     case CloseWidget(id) =>
       updated(OpenWidgets(value.xs - id))
     case CollapseWidgetToggle(id) =>
-      val targetWidget = value.xs.get(id).get
+      val targetWidget = value.xs(id)
       val modifiedWidget = targetWidget.layout.h match {
         case 1 => targetWidget.copy(
           layout = targetWidget.layout.copy(
@@ -132,25 +134,37 @@ class OpenWidgetsHandler[M](modelRW: ModelRW[M, OpenWidgets]) extends ActionHand
       }
       updated(OpenWidgets((value.xs - id ) + (id -> modifiedWidget)))
     case CloseAllWidgets => updated(OpenWidgets())
-    case UpdateLayout(id, newLayout) => {
-      val updW = value.xs.get(id)
+    case UpdateLayout(id, newLayout) =>
+      val widgets = value.xs.get(id)
         .map(_.copy(layout = newLayout))
         .map(x => value.xs + (x.id -> x))
         .getOrElse(value.xs)
-      updated(OpenWidgets(updW))
-    }
-    case SetLayout(newLayout) =>
-      println("SetLayout(newLayout)")
-      val updW = OpenWidgets(value.xs.map(x =>
-        (
-          x._1,
-          x._2.copy(
-            layout = newLayout(x._1)
-          )
-        )
-      ))
-      updated(updW)
 
+      updated(OpenWidgets(widgets))
+
+    case SetLayout(newLayout) =>
+      println("Inc:")
+      println(newLayout)
+      println("SetLayout(newLayout)")
+      val updatedWidgets = value.xs.flatMap { case (_, widget) =>
+        newLayout.get(widget.id).map(l => widget.copy(layout = l))
+      }
+
+      println("Updated:")
+      println(updatedWidgets)
+
+      updated(OpenWidgets(updatedWidgets.map(w => w.id -> w).toMap))
+    case LayoutsChanged(layouts) =>
+      val widgets = value.xs
+      val updatedWidgets = widgets.map { case (id, widget) =>
+        val updatedWidget = layouts.find(_.key == id.toString).map(l => widget.copy(
+          layout = widget.layout.copy(x = l.x, y = l.y, w = l.w, h = l.h)
+        )).getOrElse(widget)
+
+        id -> updatedWidget
+      }
+
+      updated(OpenWidgets(updatedWidgets))
   }
 }
 

@@ -14,7 +14,7 @@ lazy val server = project.in(file("server"))
     scalaJSProjects := Seq(client),
     pipelineStages in Assets := Seq(scalaJSPipeline),
     pipelineStages := Seq(digest, gzip),
-    // triggers scalaJSPipeline when using compile or continuous compilation
+    triggers scalaJSPipeline when using compile or continuous compilation
     compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
     libraryDependencies ++= serverDependencies
   ).enablePlugins(PlayService, PlayLayoutPlugin, WebScalaJSBundlerPlugin)

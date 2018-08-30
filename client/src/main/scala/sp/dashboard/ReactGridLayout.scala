@@ -31,7 +31,7 @@ object ReactGridLayout {
   // atm there is no perfect way to facade "options" kind of jsObjects, but this is one way
   object LayoutElement {
     def apply(
-               i: String,
+               key: String,
                x: Int,
                y: Int,
                w: Int,
@@ -43,8 +43,9 @@ object ReactGridLayout {
                static: Boolean = false,
                isDraggable: Boolean = true,
                isResizable: Boolean = true
-             ) = js.Dynamic.literal(
-      i = i,
+             ): LayoutElement = js.Dynamic.literal(
+      i = key,
+      key = key,
       x = x,
       y = y,
       w = w,
@@ -56,7 +57,7 @@ object ReactGridLayout {
       static = static,
       isDraggable = isDraggable,
       isResizable = isResizable
-    )
+    ).asInstanceOf[LayoutElement]
   }
 
   @js.native

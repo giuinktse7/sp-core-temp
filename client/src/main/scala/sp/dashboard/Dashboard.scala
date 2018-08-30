@@ -8,7 +8,7 @@ import scala.scalajs.js
 import js.JSConverters._
 import org.scalajs.dom.window
 import sp.{SPWidgetBase, WidgetList}
-import sp.circuit.{GlobalState, OpenWidget, SPGUICircuit, SetLayout}
+import sp.circuit._
 import sp.dashboard.ReactGridLayout.LayoutElement
 
 
@@ -20,16 +20,15 @@ object Dashboard {
 
   val currentlyDragging = SPGUICircuit.zoom(_.draggingState.dragging)
 
-
   class Backend($: BackendScope[Props, State]) {
     def render(props: Props, state: State) = {
 
       window.onresize = _ => $.modState(_.copy(width = window.innerWidth.toInt)).runNow()
 
-      val prevOpenWidgets = props.proxy.value
+      val openWidgets = props.proxy.value
 
       val widgets = for  {
-        widgetData <- prevOpenWidgets
+        widgetData <- openWidgets
         widget <- WidgetList.list.find(_.name == widgetData.widgetType)
       } yield {
         <.div(
@@ -42,36 +41,17 @@ object Dashboard {
         )
       }
 
-      val bigLayout = for (openWidget <- prevOpenWidgets) yield {
-        ReactGridLayout.LayoutElement(
-          i = openWidget.id.toString,
-          x = openWidget.layout.x,
-          y = openWidget.layout.y,
-          w = openWidget.layout.w,
-          h = openWidget.layout.h
-        )
-      }
-
-      val onLayoutChange: js.Array[LayoutElement] => Unit = layout => {
-        val openWidgets = layout.map(e => e.key -> e).toMap
-
-        val newLayout = for {
-          prevWidget <- prevOpenWidgets
-          widget <- openWidgets.get(prevWidget.id.toString)
-        } yield {
-            val layout = prevWidget.layout.copy(x = widget.x, y = widget.y, w = widget.w, h = widget.h)
-            prevWidget.id -> layout
-        }
-
-        SPGUICircuit.dispatch(SetLayout(newLayout.toMap))
-      }
+      val currentLayout = openWidgets
+        .map(widget => (widget.id.toString, widget.layout))
+        .map { case (id, l) => LayoutElement(key = id, x = l.x, y = l.y, w = l.w, h = l.h) }
+        .toJSArray
 
       val gridLayout = ReactGridLayout(
-        layout = bigLayout.map(x => x.asInstanceOf[LayoutElement]).toJSArray,
+        layout = currentLayout.toJSArray,
         width = state.width,
         cols = cols,
         draggableHandle = "." + DashboardCSS.widgetPanelHeader.htmlClass,
-        onLayoutChange = onLayoutChange,
+        onLayoutChange = layouts => SPGUICircuit.dispatch(LayoutsChanged(layouts.toSeq)),
         children = widgets.toVdomArray
       )
 

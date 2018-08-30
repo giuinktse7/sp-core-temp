@@ -1,21 +1,20 @@
 package sp.dragging
 
 import java.util.UUID
-import japgolly.scalajs.react._
 
+import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.html_<^._
 import japgolly.scalajs.react.vdom.all.svg
 
 import scala.scalajs.js
-
 import org.scalajs.dom.window
 import org.scalajs.dom.MouseEvent
 import org.scalajs.dom.document
-
 import diode.react.ModelProxy
 import sp.circuit._
 import sp.circuit.{SetDraggableData, SetDraggableRenderStyle}
-import scala.util.Try 
+
+import scala.util.Try
 
 trait DragData
 trait DropData
@@ -111,19 +110,17 @@ object Dragging {
     def render(state: State, props: Props) = {
       <.span(
         ^.pointerEvents.none,
-        (^.className := DraggingCSS.hidden.htmlClass).unless(props.proxy().dragging),
+        // (^.className := DraggingCSS.hidden.htmlClass).unless(props.proxy().dragging),
+        {if(!props.proxy().dragging) ^.className := DraggingCSS.hidden.htmlClass
+        else EmptyVdom},
         props.proxy().renderStyle match {
           case _ =>
             <.span(
               ^.className := DraggingCSS.dragElement.htmlClass,
-              ^.style := {
-                var rect =  js.Object().asInstanceOf[Rect]
-                rect.left = state.x - opWidth/2
-                rect.top = state.y - opHeight/2
-                rect.height = opHeight
-                rect.width = opWidth
-                rect
-              },
+              ^.left := (state.x - opWidth / 2).toString,
+              ^.top := (state.y - opHeight / 2).toString,
+              ^.width := opWidth.toString,
+              ^.height := opHeight.toString,
               svg.svg(
                 svg.svg(
                   svg.width := opWidth.toInt,
@@ -168,7 +165,7 @@ object Dragging {
     onDrop = callback
   }
 
-  def onDragStart(label: String, typ: String, data: DragData, x:Float, y:Float, onDrop: DragDropData => Unit) {
+  def onDragStart(label: String, data: DragData, x:Float, y:Float, onDrop: DragDropData => Unit) {
     setDraggingData(data)
     setDraggingCallback(onDrop)
     SPGUICircuit.dispatch(SetDraggableData(label))
@@ -176,7 +173,7 @@ object Dragging {
     updateMouse(x,y)
   }
 
-  def onDragMove(x:Float, y:Float): Unit = {
+  def onDragMove(x: Float, y: Float): Unit = {
     updateMouse(x,y)
     val target = document.elementFromPoint(x, y)
     draggedOverTarget(target)
@@ -189,10 +186,6 @@ object Dragging {
    
     setDraggingData(null)
     setDraggingTarget(null)
-  }
-
-  def setDraggingStyle(style: String): Unit = {
-    SPGUICircuit.dispatch(SetDraggableRenderStyle(style))
   }
 
   def setDraggingData(data: DragData): Unit = {

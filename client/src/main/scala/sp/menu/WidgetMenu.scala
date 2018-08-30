@@ -12,11 +12,16 @@ object WidgetMenu {
   case class State(filterText: String = "")
 
   class Backend($: BackendScope[Unit, State]) {
-    def addWidget(name: String, w: Int, h: Int): Callback =
-      Callback(SPGUICircuit.dispatch(AddWidget(name, w, h)))
+    def addWidget(name: String, w: Int, h: Int): Callback = Callback {
+      println(s"addWidget: $name")
+      SPGUICircuit.dispatch(AddWidget(name, w, h))
+    }
 
     def render(state: State) = {
-      def capturedByFilter(s: String) = s.toLowerCase.contains(state.filterText.toLowerCase)
+      def capturedByFilter(s: String) = {
+        println("Captured by filter")
+        s.toLowerCase.contains(state.filterText.toLowerCase)
+      }
       val widgets = WidgetList.list.collect { case widget if capturedByFilter(widget.name) =>
           SPNavbarElements.dropdownElement(widget.name,
             addWidget(widget.name, widget.width, widget.height)

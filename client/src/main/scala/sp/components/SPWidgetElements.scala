@@ -1,6 +1,8 @@
 package sp.components
 
 import japgolly.scalajs.react._
+import japgolly.scalajs.react.raw.SyntheticTouchEvent
+import japgolly.scalajs.react.vdom.Attr
 import japgolly.scalajs.react.vdom.html_<^._
 import japgolly.scalajs.react.vdom.all.aria
 
@@ -140,7 +142,7 @@ object SPWidgetElements {
           )
         )
       def onFilterTextChange(p:Props)(e: ReactEventFromInput): Callback =
-        e.extract(_.target.value)(v => (p.onChange(v))) // TODO check if this works
+        e.extract(_.target.value)(p.onChange) // TODO check if this works
     }
 
     private val component = ScalaComponent.builder[Props]("SPTextBox")
@@ -153,81 +155,63 @@ object SPWidgetElements {
   }
 
   import java.util.UUID
-  import sp.circuit._
-  import scala.scalajs.js
   import sp.dragging._
-  import org.scalajs.dom.window
-  import org.scalajs.dom.MouseEvent
-  import org.scalajs.dom.document
-  import sp.dragging._
-  import diode.react.ModelProxy
-  import diode.ModelRO
 
   object DragoverZoneRect {
-    trait Rectangle extends js.Object {
-      var left: Float = js.native
-      var top: Float = js.native
-      var width: Float = js.native
-      var height: Float = js.native
-    }
-
-    case class Props(id: UUID, cb: (DragDropData) => Unit, dropData: DropData, x: Float, y: Float, w: Float, h: Float)
-    case class State(hovering: Boolean, id: UUID)
+    case class Props(id: UUID, cb: DragDropData => Unit, dropData: DropData, x: Float, y: Float, w: Float, h: Float)
+    case class State(hovering: Boolean = false, id: UUID = UUID.randomUUID())
     
     class Backend($: BackendScope[Props, State]) {
-
-      def setHovering(hovering: Boolean) =
+      def setHovering(hovering: Boolean): Unit =
         $.modState(s => s.copy(hovering = hovering)).runNow()
 
       def render(p:Props, s:State) = {
         <.span(
           <.span(
             ^.id := p.id.toString,
-            ^.style := {
-              var rect =  (js.Object()).asInstanceOf[Rectangle]
-              rect.left = p.x
-              rect.top = p.y
-              rect.height = p.h
-              rect.width = p.w
-              rect
-            },
+            ^.left := p.x.toString,
+            ^.top := p.y.toString,
+            ^.width := p.w.toString,
+            ^.height := p.h.toString,
             ^.className := SPWidgetElementsCSS.dropZone.htmlClass,
-            {if(s.hovering)
-              ^.className := SPWidgetElementsCSS.blue.htmlClass
-            else ""},
-            ^.onMouseOver --> Callback({
-              Dragging.setDraggingTarget(p.id)
-            })
+            (^.className := SPWidgetElementsCSS.blue.htmlClass).when(s.hovering),
+            ^.onMouseOver --> Callback { Dragging.setDraggingTarget(p.id) }
           )
         )
+      }
+
+      def didUpdate(prevProps: Props, currentProps: Props) = Callback {
+        Dragging.unsubscribeToDropEvents(prevProps.id)
+        Dragging.subscribeToDropEvents(currentProps.id, currentProps.cb, currentProps.dropData)
+        Dragging.dropzoneResubscribe(currentProps.id, prevProps.id)
+      }
+
+      def didMount(props: Props) = Callback {
+        Dragging.dropzoneSubscribe(props.id, setHovering)
+        Dragging.subscribeToDropEvents(props.id, props.cb, props.dropData)
+      }
+
+      def willUnmount(props: Props) = Callback {
+        Dragging.dropzoneUnsubscribe(props.id)
+        Dragging.unsubscribeToDropEvents(props.id)
       }
     }
 
     private val component = ScalaComponent.builder[Props]("SPDragZone")
-      .initialState(State(hovering = false, id = UUID.randomUUID()))
+      .initialState(State())
       .renderBackend[Backend]
-      .componentDidUpdate(c => Callback{
-        Dragging.unsubscribeToDropEvents(c.prevProps.id)
-        Dragging.subscribeToDropEvents(c.currentProps.id, c.currentProps.cb, c.currentProps.dropData)
-        Dragging.dropzoneResubscribe(c.currentProps.id, c.prevProps.id)
-      })
-      .componentDidMount(c => Callback{
-        Dragging.dropzoneSubscribe(c.props.id, c.backend.setHovering)
-        Dragging.subscribeToDropEvents(c.props.id, c.props.cb, c.props.dropData)
-      })
-      .componentWillUnmount(c => Callback({
-        Dragging.dropzoneUnsubscribe(c.props.id)
-        Dragging.unsubscribeToDropEvents(c.props.id)
-      }))
+      .componentDidUpdate(c => c.backend.didUpdate(c.prevProps, c.currentProps))
+      .componentDidMount(c => c.backend.didMount(c.props))
+      .componentWillUnmount(c => c.backend.willUnmount(c.props))
       .build
 
-    def apply(cb: (DragDropData) => Unit, dropData: DropData, x: Float, y: Float, w: Float, h: Float) =
+    def apply(cb: DragDropData => Unit, dropData: DropData, x: Float, y: Float, w: Float, h: Float) =
       component(Props(UUID.randomUUID(), cb, dropData, x, y, w, h))
   }
 
   object DragoverZoneWithChild {
-    case class Props(id: UUID, cb: (DragDropData) => Unit, dropData: DropData, subComponent: VdomNode)
-    case class State(hovering: Boolean, id: UUID)
+    case class Props(id: UUID, cb: DragDropData => Unit, dropData: DropData, subComponent: VdomNode)
+    case class State(hovering: Boolean = false, id: UUID = UUID.randomUUID())
     
     class Backend($: BackendScope[Props, State]) {
       def setHovering(hovering: Boolean) =
@@ -250,44 +234,47 @@ object SPWidgetElements {
           p.subComponent
         )
       }
+
+      def didUpdate(prevProps: Props, currentProps: Props) = Callback {
+        Dragging.unsubscribeToDropEvents(prevProps.id)
+        Dragging.subscribeToDropEvents(currentProps.id, currentProps.cb, currentProps.dropData)
+        Dragging.dropzoneResubscribe(currentProps.id, prevProps.id)
+      }
+
+      def didMount(props: Props) = Callback {
+        Dragging.dropzoneSubscribe(props.id, setHovering)
+        Dragging.subscribeToDropEvents(props.id, props.cb, props.dropData)
+      }
+
+      def willUnmount(props: Props) = Callback {
+        Dragging.dropzoneUnsubscribe(props.id)
+        Dragging.unsubscribeToDropEvents(props.id)
+      }
     }
 
-    private val component = ScalaComponent.builder[Props]("SPDragZoneUnzised")
-      .initialState(State(hovering = false, id = UUID.randomUUID()))
+    private val component = ScalaComponent.builder[Props]("DragoverZoneWithChild")
+      .initialState(State())
       .renderBackend[Backend]
-      .componentDidUpdate(c => Callback{
-        Dragging.unsubscribeToDropEvents(c.prevProps.id)
-        Dragging.subscribeToDropEvents(c.currentProps.id, c.currentProps.cb, c.currentProps.dropData)
-        Dragging.dropzoneResubscribe(c.currentProps.id, c.prevProps.id)
-      })
-      .componentDidMount(c => Callback{
-        Dragging.dropzoneSubscribe(c.props.id, c.backend.setHovering)
-        Dragging.subscribeToDropEvents(c.props.id, c.props.cb, c.props.dropData)
-      })
-      .componentWillUnmount(c => Callback({
-        Dragging.dropzoneUnsubscribe(c.props.id)
-        Dragging.unsubscribeToDropEvents(c.props.id)
-      }))
+      .componentDidUpdate(c => c.backend.didUpdate(c.prevProps, c.currentProps))
+      .componentDidMount(c => c.backend.didMount(c.props))
+      .componentWillUnmount(c => c.backend.willUnmount(c.props))
       .build
     
-    def apply(cb: (DragDropData) => Unit, dropData: DropData, subComponent: VdomNode) =
+    def apply(cb: DragDropData => Unit, dropData: DropData, subComponent: VdomNode) =
       component(Props(UUID.randomUUID(), cb, dropData, subComponent))
   }
 
-  def draggable(label:String, data: DragData, typ: String, onDrop: (DragDropData => Unit)): TagMod = {
+  private def onTouch(e: ReactTouchEvent) = Callback {
+    val Point(x, y) = touchPosition(e)
+    Dragging.onDragMove(x, y)
+  }
+
+  def draggable(label: String, data: DragData, typeName: String, onDrop: DragDropData => Unit): TagMod = {
     Seq(
-      (^.onTouchStart ==> handleTouchDragStart(label, data, typ, onDrop)),
-      (^.onTouchMoveCapture ==> {
-        (e: ReactTouchEvent) => Callback ({
-          val x = e.touches.item(0).pageX.toFloat
-          val y = e.touches.item(0).pageY.toFloat
-          Dragging.onDragMove(x, y)
-        })
-      }),
-      (^.onTouchEnd ==> {
-        (e: ReactTouchEvent) => Callback (Dragging.onDragStop())
-      }),
-      (^.onMouseDown ==> handleDragStart(label, data, typ, onDrop))
+      ^.onTouchStart ==> handleTouchDragStart(label, data, onDrop),
+      ^.onTouchMoveCapture ==> onTouch,
+      ^.onTouchEnd ==> { _ => Callback (Dragging.onDragStop()) },
+      ^.onMouseDown ==> handleDragStart(label, data, onDrop)
     ).toTagMod
   }
 
@@ -297,35 +284,29 @@ object SPWidgetElements {
    mouse-hover related events (and why should they) so this is a way to deal with that.
    */
   def handleTouchDrag(e: ReactTouchEvent) = Callback {
-    sp.dragging.Dragging.onDragMove(
-      e.touches.item(0).pageX.toFloat,
-      e.touches.item(0).pageY.toFloat
-    )
+    val Point(x, y) = touchPosition(e)
+    sp.dragging.Dragging.onDragMove(x, y)
   }
 
-  def handleTouchDragStart(label: String, data: DragData, typ: String, onDrop: (DragDropData => Unit))(e: ReactTouchEvent): Callback = {
-    Callback(
-      Dragging.onDragStart(
-        label = label,
-        typ = typ,
-        data = data,
-        x = e.touches.item(0).pageX.toFloat,
-        y = e.touches.item(0).pageY.toFloat,
-        onDrop = onDrop
-      )
-    )
+  case class Point[N: Numeric](x: N, y: N)
+
+  /**
+    * Returns the page position of a touch event.
+    */
+  private def touchPosition(e: ReactTouchEvent) = Point(e.touches.item(0).pageX.toFloat, e.touches.item(0).pageY.toFloat)
+
+  /**
+    * Returns the page position of a mouse event.
+    */
+  private def mousePosition(e: ReactMouseEvent) = Point(e.pageX.toFloat, e.pageY.toFloat)
+
+  def handleTouchDragStart(label: String, data: DragData, onDrop: DragDropData => Unit)(e: ReactTouchEvent): Callback = {
+    val Point(x, y) = touchPosition(e)
+    Callback(Dragging.onDragStart(label, data, x, y, onDrop))
   }
 
-  def handleDragStart(label: String, data: DragData, typ: String, onDrop: (DragDropData => Unit))(e: ReactMouseEvent): Callback = {
-    Callback(
-      Dragging.onDragStart(
-        label = label,
-        typ = typ,
-        data = data,
-        x = e.pageX.toFloat,
-        y = e.pageY.toFloat,
-        onDrop = onDrop
-      )
-    )
+  def handleDragStart(label: String, data: DragData, onDrop: DragDropData => Unit)(e: ReactMouseEvent): Callback = {
+    val Point(x, y) = mousePosition(e)
+    Callback(Dragging.onDragStart(label, data, x, y, onDrop))
   }
 }

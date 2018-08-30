@@ -30,11 +30,9 @@ object ServiceListWidget {
 
     // val answerHandler = BackendCommunication.getMessageObserver(handelMess, api.topicResponse)
 
+    // TODO Add search and sorting. Add possibility to send messaged based on API
     def render(s: State) = {
-      <.div(
-        renderServices(s),
-        <.div("todo: Add search and sorting. Add possibility to send messaged based on api")
-      )
+      renderServices(s)
     }
 
     def renderServices(state: State) = {
@@ -42,11 +40,13 @@ object ServiceListWidget {
         ^.className := "table table-striped",
         <.caption("Services"),
         <.thead(
+          <.tr(
             <.th("service"),
             <.th("name"),
             <.th("id"),
             <.th("tags"),
             <.th("version")
+          )
         ),
         <.tbody(
           state.services.map { response =>
@@ -84,7 +84,7 @@ object ServiceListWidget {
 
   }
 
-  private val component = ScalaComponent.builder[Unit]("AbilityHandlerWidget")
+  private val component = ScalaComponent.builder[Unit]("ServiceListWidget")
     .initialState(State(services = List()))
     .renderBackend[Backend]
     .componentDidMount(_.backend.onMount())
