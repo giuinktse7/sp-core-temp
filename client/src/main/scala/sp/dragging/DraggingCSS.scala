@@ -1,6 +1,6 @@
 package sp.dragging
 
-import scalacss.DevDefaults._
+import sp.CssSettings._
 import sp.theming.SPStyleSheet
 
 object DraggingCSS extends SPStyleSheet {

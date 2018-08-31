@@ -11,12 +11,13 @@ lazy val server = project.in(file("server"))
   .settings(SPSettings.buildAndPublishSettings)
   .settings(
     name := publishName + "-server",
+    libraryDependencies ++= serverDependencies,
     scalaJSProjects := Seq(client),
     pipelineStages in Assets := Seq(scalaJSPipeline),
     pipelineStages := Seq(digest, gzip),
     // triggers scalaJSPipeline when using compile or continuous compilation
     compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
-    libraryDependencies ++= serverDependencies
+    npmAssets ++= NpmAssets.ofProject(client) { modules => (modules / "react-grid-layout" / "css").allPaths }.value
   )
   .enablePlugins(PlayService, PlayLayoutPlugin, WebScalaJSBundlerPlugin)
   .disablePlugins(PlayLogback)

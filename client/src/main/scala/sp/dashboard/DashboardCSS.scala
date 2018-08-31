@@ -1,6 +1,6 @@
 package sp.dashboard
 
-import scalacss.DevDefaults._
+import sp.CssSettings._
 import sp.theming.SPStyleSheet
 
 object DashboardCSS extends SPStyleSheet {
@@ -91,6 +91,10 @@ object DashboardCSS extends SPStyleSheet {
       backgroundColor :=! "#df691a",
       opacity(0.3)
     )
+  )
+
+  val mainContainer = style(
+    position.relative
   )
 
   this.addToDocument()

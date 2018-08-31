@@ -12,6 +12,11 @@ object ReactGridLayout {
   @js.native
   object GridLayout extends js.Object
 
+  @JSImport("react-grid-layout", "Responsive")
+  @js.native
+  object Responsive extends js.Object
+
+
   @js.native
   trait LayoutElement extends js.Object {
     @JSName("i")
@@ -88,8 +93,8 @@ object ReactGridLayout {
              draggableHandle: String = "",
              verticalCompact: Boolean = true,
              layout: js.Array[LayoutElement] = js.Array(),
-             margin: js.Array[Int] = js.Array(3,3),
-             containerPadding: js.Array[Int] = js.Array(3,3),
+             margin: js.Array[Int] = js.Array(3, 3),
+             containerPadding: js.Array[Int] = js.Array(3, 3),
              rowHeight: Int = 50,
              isDraggable: Boolean = true,
              isResizable: Boolean = true,

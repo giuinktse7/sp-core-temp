@@ -12,7 +12,7 @@ object Dependencies {
     val scalaJs = "0.9.6"
     val scalaJsReact = "1.1.0"
     val diode = "1.1.3"
-    val scalaCss = "0.5.3"
+    val scalaCss = "0.5.5"
   }
 
   object npmVersions {

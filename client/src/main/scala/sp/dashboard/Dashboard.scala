@@ -10,6 +10,7 @@ import org.scalajs.dom.window
 import sp.{SPWidgetBase, WidgetList}
 import sp.circuit._
 import sp.dashboard.ReactGridLayout.LayoutElement
+import sp.toHtml
 
 
 object Dashboard {
@@ -55,16 +56,24 @@ object Dashboard {
         children = widgets.toVdomArray
       )
 
+      val disableDropzone = ^.className := "dropzonesDisabled"
+
       <.div(
-        {if(!currentlyDragging.value) ^.className := "dropzonesDisabled" else EmptyVdom},
+        DashboardCSS.mainContainer,
+        disableDropzone.unless(currentlyDragging.value),
         gridLayout
       )
+    }
+
+    def didMount() = {
+      $.modState(_.copy(width = window.innerWidth.toInt))
     }
   }
 
   private val component = ScalaComponent.builder[Props]("Dashboard")
     .initialState(State(0))
     .renderBackend[Backend]
+    .componentDidMount(ctx => ctx.backend.didMount())
     .build
 
   def apply(proxy: ModelProxy[List[OpenWidget]]) = component(Props(proxy))

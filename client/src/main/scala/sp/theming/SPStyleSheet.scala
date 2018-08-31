@@ -1,6 +1,6 @@
 package sp.theming
 
-import scalacss.DevDefaults._
+import sp.CssSettings._
 
 trait SPStyleSheet extends StyleSheet.Inline {
   import sp.circuit.SPGUICircuit

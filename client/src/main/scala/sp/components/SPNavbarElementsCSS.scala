@@ -1,15 +1,15 @@
 package sp.components
 
-import scalacss.DevDefaults._
+import sp.CssSettings._
 import sp.theming.SPStyleSheet
 
 object SPNavbarElementsCSS extends SPStyleSheet {
   import dsl._
 
   val button = style(
-    (color ( _rgb(theme.value.defaultTextColor))).important,
+    color ( _rgb(theme.value.defaultTextColor)).important,
     unsafeChild("span")(
-      (color ( _rgb(theme.value.defaultTextColor))).important
+      color ( _rgb(theme.value.defaultTextColor)).important
     ),
     &.active(
       //(backgroundColor:= "#aaaaaa").important

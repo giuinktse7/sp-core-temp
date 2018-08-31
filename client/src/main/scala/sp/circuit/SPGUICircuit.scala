@@ -156,6 +156,7 @@ class OpenWidgetsHandler[M](modelRW: ModelRW[M, OpenWidgets]) extends ActionHand
       updated(OpenWidgets(updatedWidgets.map(w => w.id -> w).toMap))
     case LayoutsChanged(layouts) =>
       val widgets = value.xs
+      widgets.foreach(x => println(x._2.layout.y))
       val updatedWidgets = widgets.map { case (id, widget) =>
         val updatedWidget = layouts.find(_.key == id.toString).map(l => widget.copy(
           layout = widget.layout.copy(x = l.x, y = l.y, w = l.w, h = l.h)

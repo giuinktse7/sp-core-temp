@@ -1,6 +1,6 @@
 package sp.components
 
-import scalacss.DevDefaults._
+import sp.CssSettings._
 import sp.theming.SPStyleSheet
 
 object SPWidgetElementsCSS extends SPStyleSheet {
