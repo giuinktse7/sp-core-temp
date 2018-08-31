@@ -6,6 +6,16 @@ import Dependencies._
 lazy val publishVersion = "testingLocal180829"
 lazy val publishName = "sp-core"
 
+def npmAssetsIn(paths: Seq[Seq[String]])  = NpmAssets.ofProject(client) { module =>
+  paths.map { path => path.foldLeft(module)(_ / _).allPaths }
+    .reduce(_ +++ _)
+}
+
+lazy val npmAssetLocations = Seq(
+  Seq("react-grid-layout", "css"),
+  Seq("bootstrap", "dist")
+)
+
 lazy val server = project.in(file("server"))
   .settings(commonSettings)
   .settings(SPSettings.buildAndPublishSettings)
@@ -17,7 +27,7 @@ lazy val server = project.in(file("server"))
     pipelineStages := Seq(digest, gzip),
     // triggers scalaJSPipeline when using compile or continuous compilation
     compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
-    npmAssets ++= NpmAssets.ofProject(client) { modules => (modules / "react-grid-layout" / "css").allPaths }.value
+    npmAssets ++= npmAssetsIn(npmAssetLocations).value
   )
   .enablePlugins(PlayService, PlayLayoutPlugin, WebScalaJSBundlerPlugin)
   .disablePlugins(PlayLogback)

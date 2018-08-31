@@ -18,6 +18,7 @@ object Dependencies {
   object npmVersions {
     val react = "16.2.0"
     val reactGridLayout = "0.16.6"
+    val bootstrap = "4.1.3"
   }
 
   object clientDependencies {
@@ -34,7 +35,8 @@ object Dependencies {
     val javascript = Seq(
       "react" -> npmVersions.react,
       "react-dom" -> npmVersions.react,
-      "react-grid-layout" -> npmVersions.reactGridLayout
+      "react-grid-layout" -> npmVersions.reactGridLayout,
+      "bootstrap" -> npmVersions.bootstrap
     )
   }
 
