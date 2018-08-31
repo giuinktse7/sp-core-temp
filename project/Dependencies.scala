@@ -49,8 +49,8 @@ object Dependencies {
   val spDependencies = Def.setting(Seq(
     "com.typesafe.play" %%% "play-json" % "2.6.7",
     "org.julienrf" %%% "play-json-derived-codecs" % "4.0.1",
-    PublishingSettings.orgNameFull %%% "sp-domain" % "0.9.12",
-    PublishingSettings.orgNameFull %%% "sp-comm" % "0.9.11"
+    PublishingSettings.orgNameFull %%% "sp-domain" % "0.9.12" ,
+    PublishingSettings.orgNameFull %%% "sp-comm" % "0.9.11" exclude ("org.slf4j", "slf4j-simple")
   ))
 
   val serverDependencies = Seq(
