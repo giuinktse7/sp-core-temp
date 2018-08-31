@@ -18,3 +18,5 @@ addSbtPlugin("ch.epfl.scala" % "sbt-web-scalajs-bundler" % "0.13.1")
 
 addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.3")
 addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.0")
+
+addSbtPlugin("org.irundaia.sbt" % "sbt-sassify" % "1.4.11")

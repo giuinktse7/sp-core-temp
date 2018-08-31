@@ -19,6 +19,7 @@ object Dependencies {
     val react = "16.2.0"
     val reactGridLayout = "0.16.6"
     val bootstrap = "4.1.3"
+    val sassify = "4.0.1"
   }
 
   object clientDependencies {
@@ -36,7 +37,8 @@ object Dependencies {
       "react" -> npmVersions.react,
       "react-dom" -> npmVersions.react,
       "react-grid-layout" -> npmVersions.reactGridLayout,
-      "bootstrap" -> npmVersions.bootstrap
+      "bootstrap" -> npmVersions.bootstrap,
+      "sassify" -> npmVersions.sassify
     )
   }
 
