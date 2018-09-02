@@ -21,6 +21,7 @@ object Dependencies {
     val bootstrap = "4.1.3"
     val sassify = "4.0.1"
     val fontAwesome = "5.3.1"
+    val jquery = "3.3.1"
   }
 
   object clientDependencies {
@@ -40,7 +41,8 @@ object Dependencies {
       "react-grid-layout" -> npmVersions.reactGridLayout,
       "bootstrap" -> npmVersions.bootstrap,
       "@fortawesome/fontawesome-free" -> npmVersions.fontAwesome,
-      "sassify" -> npmVersions.sassify
+      "sassify" -> npmVersions.sassify,
+      "jquery" -> npmVersions.jquery
     )
   }
 

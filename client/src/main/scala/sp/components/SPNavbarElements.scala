@@ -8,10 +8,9 @@ object SPNavbarElements {
   import sp.components.{SPNavbarElementsCSS => css}
 
   def button(text:String, onClick: Callback): VdomNode =
-    <.li(
-      bootstrap("d-flex", "align-items-stretch"),
+    <.li(bootstrap("nav-item"),
       <.a(
-        bootstrap("d-flex", "align-items-center"),
+        bootstrap("nav-link"),
         ^.href := "#",
         css.leftRightPad,
         ^.onClick --> onClick,
@@ -41,10 +40,10 @@ object SPNavbarElements {
 
   def dropdown(text: String, contents: Seq[TagMod]): VdomElement = {
     <.li(
-      bootstrap("nav-item", "dropdown", "d-flex align-items-stretch"),
+      bootstrap("nav-item", "dropdown"),
       <.a(
         ^.href := "#",
-        bootstrap("nav-link", "dropdown-toggle", "d-flex align-items-center"),
+        bootstrap("nav-link", "dropdown-toggle"),
         ^.id := "something",
         VdomAttr("data-toggle") := "dropdown",
         text

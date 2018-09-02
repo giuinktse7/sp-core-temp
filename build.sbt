@@ -18,7 +18,8 @@ lazy val npmAssetLocations = Seq(
   Seq("react-grid-layout", "css"),
   Seq("bootstrap", "dist"),
   Seq("@fortawesome", "fontawesome-free", "css"),
-  Seq("@fortawesome", "fontawesome-free", "webfonts")
+  Seq("@fortawesome", "fontawesome-free", "webfonts"),
+  Seq("jquery", "dist")
 )
 
 lazy val server = project.in(file("server"))

@@ -10,16 +10,15 @@ import sp.theming.SPStyleSheet
 import sp.theming.SPStyleSheet.Theme
 
 object SPMenu {
-  import sp.menu.{SPMenuCSS => css}
   case class Props(proxy: ModelProxy[Settings], additionalNavElements: Seq[VdomElement])
 
   class SPMenuBackend($: BackendScope[Props, Unit]){
     def menuItems(props: Props) = {
       <.div(
-        bootstrap("collapse", "navbar-collapse", "align-self-stretch"),
+        bootstrap("collapse", "navbar-collapse"),
         ^.id := "navbar-contents",
         <.ul(
-          bootstrap("navbar-nav", "mr-auto", "align-self-stretch"),
+          bootstrap("navbar-nav", "mr-auto"),
           WidgetMenu(),
           renderOptions(props),
           props.additionalNavElements.toTagMod(x => x.apply()), // Insert any additional menu items added by someone else
