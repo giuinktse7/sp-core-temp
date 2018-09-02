@@ -40,48 +40,20 @@ object SPMenuCSS extends SPStyleSheet {
   )
 
 
-  val navbarToggleButtonIcon = style(
-    position.absolute,
-    top(50.%%),
-    left(50.%%),
-    transform := "translate(-50%,-50%)"
-  )
-
-  val navbarToggleButtonOuter = style(
-
-   )
-
-  val buttonPadding = 4;
+  val buttonPadding = 4
   val navItem = style("sp-nav-item")(
     paddingRight(buttonPadding.px),
     height(100.%%)
   )
 
   val logoPadding = 0 // currently no padding needed
-  val splogoHeight = topNavHeight * (1-logoPadding)
+  val splogoHeight = topNavHeight * (1 - logoPadding)
   val splogoWidth = splogoHeight * splogoSVGWidth / splogoSVGHeight
   val spLogo = style("spLogo")(
     backgroundRepeat := "no-repeat",
     backgroundImage := "url(versionedAssets/images/splogo_title.svg)",
     height(splogoHeight.px),
     width(splogoWidth.px),
-    marginLeft((logoPadding * splogoWidth / 2).px),
-    marginRight((logoPadding * splogoWidth / 2).px)
-  )
-
-  val spLogoDiv = style("sp-logo-outer")(
-    backgroundColor(_rgb(theme.value.navbarLogoBackgroundColor)),
-    height.inherit,
-    display.flex,
-    alignItems.center
-  )
-
-  val splogoContainer = style("sp-splogo-container") (
-    margin(0.px),
-    padding(0.px),
-    height(topNavHeight.px),
-    alignItems.center,
-    display.flex
   )
 
   val dropDownButtonInner = style("sp-dropwdown-inner")(

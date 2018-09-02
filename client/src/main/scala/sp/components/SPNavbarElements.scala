@@ -2,26 +2,32 @@ package sp.components
 
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.html_<^._
-import scalacss.devOrProdDefaults
+import sp.{bootstrap, toHtml}
 
-object SPNavbarElements{
+object SPNavbarElements {
+  import sp.components.{SPNavbarElementsCSS => css}
+
   def button(text:String, onClick: Callback): VdomNode =
     <.li(
-      <.a(text,
+      bootstrap("d-flex", "align-items-stretch"),
+      <.a(
+        bootstrap("d-flex", "align-items-center"),
+        css.clickable,
+        css.button,
+        css.leftRightPad,
         ^.onClick --> onClick,
-        ^.className := SPNavbarElementsCSS.clickable.htmlClass,
-        ^.className := SPNavbarElementsCSS.button.htmlClass
+        text
       )
     )
 
   def button(text:String, icon:VdomNode, onClick: Callback): VdomNode =
     <.li(
       <.a(
-        <.span(text, ^.className:= SPWidgetElementsCSS.textIconClearance.htmlClass),
+        <.span(text, SPWidgetElementsCSS.textIconClearance),
         icon,
         ^.onClick --> onClick,
-        ^.className := SPNavbarElementsCSS.clickable.htmlClass,
-        ^.className := SPNavbarElementsCSS.button.htmlClass
+        css.clickable,
+        css.button
       )
     )
 
@@ -29,57 +35,43 @@ object SPNavbarElements{
     <.li(
       <.a(icon,
         ^.onClick --> onClick,
-        ^.className := SPNavbarElementsCSS.clickable.htmlClass,
-        ^.className := SPNavbarElementsCSS.button.htmlClass
+        css.clickable,
+        css.button
       )
     )
 
   def dropdown(text: String, contents: Seq[TagMod]): VdomElement =
     <.li(
-      ^.className := SPNavbarElementsCSS.dropdownRoot.htmlClass,
-      ^.className := "navbar-dropdown",
+      bootstrap("nav-item", "dropdown", "d-flex", "align-items-stretch"),
+      css.dropdownRoot,
       <.a(
-        <.span(text, ^.className:= SPNavbarElementsCSS.textIconClearance.htmlClass),
-        Icon.caretDown,
+        bootstrap("nav-link", "dropdown-toggle", "d-flex", "align-items-center"),
+        <.span(text, css.textIconClearance),
         VdomAttr("data-toggle") := "dropdown",
         ^.id:="something",
-        ^.className := SPNavbarElementsCSS.clickable.htmlClass,
-        ^.className := "nav-link dropdown-toggle"
+        css.clickable,
+        css.leftRightPad
       ),
-      <.ul(
-        contents.toTagMod,
-        ^.className := SPNavbarElementsCSS.dropDownList.htmlClass,
-        ^.className := "dropdown-menu"
-      )
+      <.ul(bootstrap("dropdown-menu"), contents.toTagMod)
     )
 
   def dropdownElement(text: String, icon: VdomNode, onClick: Callback): VdomNode = 
     <.li(
-      ^.className := SPNavbarElementsCSS.dropdownElement.htmlClass,
-      <.span(icon, ^.className := SPNavbarElementsCSS.textIconClearance.htmlClass),
-      text,
-      ^.onClick --> onClick
+      bootstrap("dropdown-item"),
+      css.dropdownElement,
+      <.span(icon, css.textIconClearance),
+      ^.onClick --> onClick,
+      text
     )
 
   def dropdownElement(text: String, onClick: Callback): VdomNode =
-    <.li(
-      ^.className := SPNavbarElementsCSS.dropdownElement.htmlClass,
-      text,
-      ^.onClick --> onClick
-    )
+    <.li(bootstrap("dropdown-item"), css.dropdownElement, ^.onClick --> onClick, text)
 
   def dropdownElement(content: TagMod, onClick: Callback): VdomNode =
-    <.li(
-      ^.className := SPNavbarElementsCSS.dropdownElement.htmlClass,
-      content,
-      ^.onClick --> onClick
-    )
+    <.li(bootstrap("dropdown-item"), css.dropdownElement, ^.onClick --> onClick, content)
 
   def dropdownElement(content: TagMod): VdomNode =
-    <.li(
-      ^.className := SPNavbarElementsCSS.dropdownElement.htmlClass,
-      content
-    )
+    <.li(bootstrap("dropdown-item"), css.dropdownElement, content)
 
   object TextBox {
     case class Props(contentText: String, placeholderText: String, onChange: String => Callback )
@@ -98,7 +90,7 @@ object SPNavbarElements{
           )
         )
       def onFilterTextChange(p:Props)(e: ReactEventFromInput): Callback =
-        e.extract(_.target.value)(v => (p.onChange(v)))
+        e.extract(_.target.value)(v => p.onChange(v))
     }
 
     private val component = ScalaComponent.builder[Props]("SPTextBox")

@@ -21,11 +21,11 @@ object DashboardItem {
 
   class DashboardItemBackend($: BackendScope[Props, Unit]) {
 
-    def render(p: Props) = {
+    def render(props: Props) = {
       println("Rendering DashboardItem")
       val closeButton = <.a(
         ^.className := "close",
-        ^.onClick --> Callback(SPGUICircuit.dispatch(CloseWidget(p.id))),
+        ^.onClick --> Callback(SPGUICircuit.dispatch(CloseWidget(props.id))),
         Icon.close,
         css.widgetPanelButton
       )
@@ -35,11 +35,10 @@ object DashboardItem {
         VdomAttr("title") := "toggle panel",
         ^.className := "close",
         ^.onClick --> Callback(SPGUICircuit.dispatch(
-          CollapseWidgetToggle(p.id)
+          CollapseWidgetToggle(props.id)
         )),
         css.widgetPanelButton,
-        if(p.panelHeight == 1)Icon.arrowDown
-        else Icon.arrowUp
+        if(props.panelHeight == 1) Icon.arrowDown else Icon.arrowUp
       )
 
       <.div(
@@ -47,18 +46,19 @@ object DashboardItem {
         <.div(
           ^.className := "modal-header",
           css.widgetPanelHeader,
-          <.h5(
-            css.widgetPanelLabel, p.widgetType),
-          closeButton,
-          toggle,
+          <.h5(css.widgetPanelLabel, props.widgetType),
+          <.div(
+            closeButton,
+            toggle
+          ),
           css.widgetPanelHidden.unless(showHeaders.value)
         ),
         <.div(
-          ^.className := css.widgetPanelBody.htmlClass,
+          css.widgetPanelBody,
           <.div(
             ^.className := "panel-body",
-            ^.className := css.widgetPanelContent.htmlClass,
-            p.element
+            css.widgetPanelContent,
+            props.element
           )
         )
       )

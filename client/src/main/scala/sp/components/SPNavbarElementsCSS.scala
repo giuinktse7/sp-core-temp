@@ -21,10 +21,7 @@ object SPNavbarElementsCSS extends SPStyleSheet {
   val textIconClearance = style(marginRight(6.px) )
 
   val dropdownRoot = style (
-    unsafeChild(".dropdown-menu")(
-      padding(4.px)
-    ),
-    unsafeRoot(".navbar-dropdown.open > a > i")( 
+    unsafeRoot(".navbar-dropdown.open > a > i")(
       transform := "rotate(180deg)" // flip the caret
     ),
     unsafeRoot(".navbar-dropdown.open > a")(
@@ -53,6 +50,11 @@ object SPNavbarElementsCSS extends SPStyleSheet {
     &.hover(
       backgroundColor(_rgb(theme.value.navbarButtonBackgroundHoverColor)).important
     )
+  )
+
+  val leftRightPad = style(
+    paddingLeft(15.px),
+    paddingRight(15.px)
   )
 
   val dropdownElement = style(

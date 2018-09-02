@@ -14,6 +14,7 @@ import sp.toHtml
 
 
 object Dashboard {
+  import sp.dashboard.{DashboardCSS => css}
   case class Props(proxy: ModelProxy[List[OpenWidget]])
   case class State(width: Int)
 
@@ -51,7 +52,7 @@ object Dashboard {
         layout = currentLayout.toJSArray,
         width = state.width,
         cols = cols,
-        draggableHandle = "." + DashboardCSS.widgetPanelHeader.htmlClass,
+        draggableHandle = "." + css.widgetPanelHeader.htmlClass,
         onLayoutChange = layouts => SPGUICircuit.dispatch(LayoutsChanged(layouts.toSeq)),
         children = widgets.toVdomArray
       )
@@ -59,7 +60,7 @@ object Dashboard {
       val disableDropzone = ^.className := "dropzonesDisabled"
 
       <.div(
-        DashboardCSS.mainContainer,
+        css.mainContainer,
         disableDropzone.unless(currentlyDragging.value),
         gridLayout
       )

@@ -1,12 +1,9 @@
 package sp.menu
 
 import japgolly.scalajs.react._
-import japgolly.scalajs.react.vdom.html_<^._
-import japgolly.scalajs.react.vdom.all.aria
-import scalacss.ScalaCssReact._
 import sp.circuit.{AddWidget, SPGUICircuit}
 import sp.WidgetList
-import sp.components.{Icon, SPNavbarElements}
+import sp.components.SPNavbarElements
 
 object WidgetMenu {
   case class State(filterText: String = "")
