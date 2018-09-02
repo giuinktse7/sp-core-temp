@@ -9,22 +9,6 @@ object SPMenuCSS extends SPStyleSheet {
 
   val topNavHeight = 50 //use in GlobalCSS.scala
 
-  val splogoSVGHeight = 60.4
-  val splogoSVGWidth = 170.1
-
-  val topNav = style("sp-top-nav")(
-    marginBottom(0.px),
-    border.none
-  )
-
-  val navbarContents = style(
-    border.none,
-    backgroundColor(_rgb(theme.value.navbarBackgroundColor))
-  )
-
-  val topNavHeader = style(
-  )
-
   val navbarToggleButton = style(
     fontSize(20.px),
     height(50.px),
@@ -44,16 +28,6 @@ object SPMenuCSS extends SPStyleSheet {
   val navItem = style("sp-nav-item")(
     paddingRight(buttonPadding.px),
     height(100.%%)
-  )
-
-  val logoPadding = 0 // currently no padding needed
-  val splogoHeight = topNavHeight * (1 - logoPadding)
-  val splogoWidth = splogoHeight * splogoSVGWidth / splogoSVGHeight
-  val spLogo = style("spLogo")(
-    backgroundRepeat := "no-repeat",
-    backgroundImage := "url(versionedAssets/images/splogo_title.svg)",
-    height(splogoHeight.px),
-    width(splogoWidth.px),
   )
 
   val dropDownButtonInner = style("sp-dropwdown-inner")(

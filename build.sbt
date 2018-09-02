@@ -11,9 +11,14 @@ def npmAssetsIn(paths: Seq[Seq[String]])  = NpmAssets.ofProject(client) { module
     .reduce(_ +++ _)
 }
 
+/**
+  * These are files from npm-dependencies that we want to be able to serve through versionedAssets or assets.
+  */
 lazy val npmAssetLocations = Seq(
   Seq("react-grid-layout", "css"),
-  Seq("bootstrap", "dist")
+  Seq("bootstrap", "dist"),
+  Seq("@fortawesome", "fontawesome-free", "css"),
+  Seq("@fortawesome", "fontawesome-free", "webfonts")
 )
 
 lazy val server = project.in(file("server"))

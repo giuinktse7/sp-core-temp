@@ -21,10 +21,6 @@ object SPMenu {
         <.ul(
           bootstrap("navbar-nav", "mr-auto", "align-self-stretch"),
           WidgetMenu(),
-          <.button(
-            bootstrap("btn", "btn-primary"),
-            ^.onClick --> Callback(SwitchTheme.to("dark")),
-            "Primary"),
           renderOptions(props),
           props.additionalNavElements.toTagMod(x => x.apply()), // Insert any additional menu items added by someone else
           SPNavbarElements.button("Close all", Callback(SPGUICircuit.dispatch(CloseAllWidgets)))
@@ -43,7 +39,6 @@ object SPMenu {
         SPGUICircuit.dispatch(
           SetTheme(SPStyleSheet.themeList.find(_.name == theme.name).get)
         )
-        org.scalajs.dom.window.location.reload() // reload the page
       }
 
       def renderThemeOption(theme: Theme) = {
@@ -60,13 +55,17 @@ object SPMenu {
 
     def render(props: Props): VdomElement = {
       <.nav(
-        bootstrap("navbar", "navbar-light", "navbar-expand-lg", "bg-light", "p-0"),
-        <.a(bootstrap("navbar-brand", "p-0", "m-0"), <.div(css.spLogo)),
+        bootstrap("navbar", "navbar-expand-lg", "navbar-bg", "p-0"),
+        //<.a(bootstrap("navbar-brand", "p-0", "m-0"), <.div(css.spLogo)),
+        <.a(
+          bootstrap("navbar-brand", "p-0", "m-0"),
+          <.img(^.src := "versionedAssets/images/splogo_title.svg", ^.height := 50.px)
+        ),
         <.button(
           bootstrap("navbar-toggler"),
           VdomAttr("data-toggle") := "collapse",
           VdomAttr("data-target") := "#navbar-contents",
-          <.span(bootstrap("navbar-toggler-icon"))
+          <.span(bootstrap("navbar-toggler-icon"), ^.className := "fas fa-bars")
         ),
         menuItems(props)
       )

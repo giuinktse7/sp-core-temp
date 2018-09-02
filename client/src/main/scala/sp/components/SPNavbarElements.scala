@@ -12,8 +12,7 @@ object SPNavbarElements {
       bootstrap("d-flex", "align-items-stretch"),
       <.a(
         bootstrap("d-flex", "align-items-center"),
-        css.clickable,
-        css.button,
+        ^.href := "#",
         css.leftRightPad,
         ^.onClick --> onClick,
         text
@@ -40,20 +39,22 @@ object SPNavbarElements {
       )
     )
 
-  def dropdown(text: String, contents: Seq[TagMod]): VdomElement =
+  def dropdown(text: String, contents: Seq[TagMod]): VdomElement = {
     <.li(
-      bootstrap("nav-item", "dropdown", "d-flex", "align-items-stretch"),
-      css.dropdownRoot,
+      bootstrap("nav-item", "dropdown", "d-flex align-items-stretch"),
       <.a(
-        bootstrap("nav-link", "dropdown-toggle", "d-flex", "align-items-center"),
-        <.span(text, css.textIconClearance),
+        ^.href := "#",
+        bootstrap("nav-link", "dropdown-toggle", "d-flex align-items-center"),
+        ^.id := "something",
         VdomAttr("data-toggle") := "dropdown",
-        ^.id:="something",
-        css.clickable,
-        css.leftRightPad
+        text
       ),
-      <.ul(bootstrap("dropdown-menu"), contents.toTagMod)
+      <.ul(
+        bootstrap("dropdown-menu"),
+        contents.toTagMod
+      )
     )
+  }
 
   def dropdownElement(text: String, icon: VdomNode, onClick: Callback): VdomNode = 
     <.li(
