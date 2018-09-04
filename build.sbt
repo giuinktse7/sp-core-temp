@@ -36,7 +36,7 @@ lazy val server = project.in(file("server"))
     npmAssets ++= npmAssetsIn(npmAssetLocations).value
   )
   .enablePlugins(PlayService, PlayLayoutPlugin, WebScalaJSBundlerPlugin)
-  .disablePlugins(PlayLogback)
+  //.disablePlugins(PlayLogback)
   .dependsOn(sharedJvm)
 
 lazy val client = project.in(file("client"))
