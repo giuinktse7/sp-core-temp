@@ -20,3 +20,6 @@ addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.3")
 addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.0")
 
 addSbtPlugin("org.irundaia.sbt" % "sbt-sassify" % "1.4.11")
+
+addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.9.2")
+addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.3")
