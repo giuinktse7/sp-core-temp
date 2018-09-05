@@ -5,7 +5,7 @@ import japgolly.scalajs.react.vdom.html_<^._
 import sp.components.{Icon, SPNavbarElements}
 import sp.circuit._
 import diode.react.ModelProxy
-import sp.{SwitchTheme, bootstrap, toHtml}
+import sp.{Assets, bootstrap, toHtml}
 import sp.theming.SPStyleSheet
 import sp.theming.SPStyleSheet.Theme
 
@@ -58,7 +58,7 @@ object SPMenu {
         //<.a(bootstrap("navbar-brand", "p-0", "m-0"), <.div(css.spLogo)),
         <.a(
           bootstrap("navbar-brand", "p-0", "m-0"),
-          <.img(^.src := "versionedAssets/images/splogo_title.svg", ^.height := 50.px)
+          <.img(^.src := Assets.getLibAsset("images/splogo_title.svg"), ^.height := 50.px)
         ),
         <.button(
           bootstrap("navbar-toggler"),

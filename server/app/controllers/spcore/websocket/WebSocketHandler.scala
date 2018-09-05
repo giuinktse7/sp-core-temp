@@ -1,12 +1,12 @@
-package sp.websocket
+package controllers.spcore.websocket
 
 import akka.NotUsed
 import akka.actor.ActorRef
 import akka.cluster.pubsub.DistributedPubSubMediator.Publish
 import akka.stream.FlowShape
 import akka.stream.scaladsl.{Broadcast, Flow, GraphDSL, Sink, Source}
+import controllers.spcore.MessageDomain
 import play.api.mvc.WebSocket
-import sp.MessageDomain
 import sp.domain.Logic._
 import sp.domain.{SPAttributes, SPMessage}
 

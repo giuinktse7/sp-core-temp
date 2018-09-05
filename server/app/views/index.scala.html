@@ -1,0 +1,13 @@
+@(asDependency: Boolean = true)
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SP-Core</title>
+        @spcore.indexHeader(asDependency)
+    </head>
+    <body>
+        <div id="spgui-root"></div>
+        @spcore.indexBody(asDependency)
+    </body>
+</html>

@@ -1,0 +1,11 @@
+@(asDependency: Boolean = true)
+
+@if(asDependency) {
+    @jsAssets("lib/sp-core-server/sp-core-client-opt-bundle.js")
+} else {
+    @jsAssets(
+        "sp-core-client-fastopt-library.js",
+        "sp-core-client-fastopt-loader.js",
+        "sp-core-client-fastopt.js"
+    )
+}

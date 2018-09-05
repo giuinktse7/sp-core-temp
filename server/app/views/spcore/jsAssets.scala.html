@@ -1,0 +1,5 @@
+@(assets: String*)
+
+@for(asset <- assets) {
+    <script src="/versionedAssets/@asset" type="text/javascript"></script>
+}

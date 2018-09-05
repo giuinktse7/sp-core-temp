@@ -1,15 +1,14 @@
-package sp
+package controllers.spcore
 
 import play.api.libs.json.{JsObject, JsValue}
 import sp.domain.SPMessage
-import sp.domain.logic.AttributeLogic._
 
 /**
   * Domain that messages sent through the websocket must adhere to.
   */
 case class MessageDomain(headerDomain: Map[String, Set[JsValue]] = Map(), bodyDomain: Map[String, Set[JsValue]] = Map()) {
   private def isAllowed(o: JsObject, domain: Map[String, Set[JsValue]]): Boolean = {
-    domain.forall { case (k, vs) => o.get(k).forall(vs.contains) }
+    domain.forall { case(k, vs) => o.value.get(k).forall(vs.contains) }
   }
   private def isAllowedHeader(header: JsObject): Boolean = isAllowed(header, headerDomain)
   private def isAllowedBody(body: JsObject): Boolean = isAllowed(body, bodyDomain)

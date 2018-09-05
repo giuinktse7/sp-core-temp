@@ -1,0 +1,20 @@
+@(asDependency: Boolean = true)
+
+@defining(if (asDependency) "lib/sp-core-server/" else "") { extra =>
+    @imageAsset(extra + "images/favicon.png", rel = "shortcut icon")
+
+
+
+    @cssAssets(
+        extra + "stylesheets/main.css",
+        extra + "react-grid-layout/css/styles.css",
+        extra + "@fortawesome/fontawesome-free/css/solid.min.css",
+        extra + "@fortawesome/fontawesome-free/css/fontawesome.min.css"
+    )
+    <link id="sp-theme" rel="stylesheet" media="screen" href="/versionedAssets/@libPrefix("stylesheets/themes/default.css", asDependency)">
+
+    @jsAssets(
+        extra + "jquery/dist/jquery.min.js",
+        extra + "bootstrap/dist/js/bootstrap.bundle.min.js",
+    )
+}

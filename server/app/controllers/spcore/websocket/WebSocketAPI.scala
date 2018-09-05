@@ -1,4 +1,4 @@
-package sp.websocket
+package controllers.spcore.websocket
 
 import sp.domain.Logic.deriveFormatISA
 import sp.domain.{SPMessage, SPValue}

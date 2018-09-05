@@ -1,4 +1,4 @@
-package sp.datapipeline
+package controllers.spcore.datapipeline
 
 object Util {
   import scala.collection.immutable.ListMap

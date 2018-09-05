@@ -1,20 +1,19 @@
-package sp
+package controllers.spcore
 
 import akka.NotUsed
 import akka.stream.scaladsl.{Flow, Source}
+import controllers.spcore.datapipeline.DataPipeline
 import javax.inject.Inject
 import play.api.libs.json.Json
 import play.api.routing.Router.Routes
 import play.api.routing.SimpleRouter
 import play.api.routing.sird._
-import sp.controllers.Application
-import sp.datapipeline.DataPipeline
 import sp.domain.{JSWrites, SPValue}
 
-import scala.util.Random
 import scala.concurrent.duration._
+import scala.util.Random
 
-class DataRouter @Inject()(controller: Application) extends SimpleRouter {
+class DataRouter @Inject()(controller: SPCoreLaunch) extends SimpleRouter {
   val intSource = Source.repeat(100).map(x => Math.floor(Random.nextDouble() * x)).throttle(1, 2 seconds)
   val stringSource = Source.repeat(100).map(_ => Random.nextPrintableChar().toString).throttle(1, 2.seconds)
 

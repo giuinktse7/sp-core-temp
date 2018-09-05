@@ -3,7 +3,7 @@ import sbtcrossproject.CrossType
 import Dependencies._
 
 
-lazy val publishVersion = "testingLocal180829"
+lazy val publishVersion = "testingLocal-SNAPSHOT"
 lazy val publishName = "sp-core"
 
 def npmAssetsIn(paths: Seq[Seq[String]])  = NpmAssets.ofProject(client) { module =>
@@ -35,7 +35,7 @@ lazy val server = project.in(file("server"))
     compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
     npmAssets ++= npmAssetsIn(npmAssetLocations).value
   )
-  .enablePlugins(PlayService, PlayLayoutPlugin, WebScalaJSBundlerPlugin)
+  .enablePlugins(PlayService, PlayLayoutPlugin, SbtTwirl, WebScalaJSBundlerPlugin)
   .disablePlugins(PlayLogback)
   .dependsOn(sharedJvm)
 

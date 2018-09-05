@@ -1,4 +1,4 @@
-package sp.websocket
+package controllers.spcore.websocket
 
 import akka.stream.scaladsl.Flow
 import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}

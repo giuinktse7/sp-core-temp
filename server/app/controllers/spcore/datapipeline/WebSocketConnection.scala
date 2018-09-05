@@ -1,4 +1,4 @@
-package sp.datapipeline
+package controllers.spcore.datapipeline
 
 import akka.NotUsed
 import akka.stream.scaladsl.{Flow, Source}
@@ -7,7 +7,7 @@ import play.api.libs.json.{JsError, JsResult, JsSuccess, Json}
 import sp.Pipe
 import sp.Pipe.PipeFormat._
 import sp.domain.{JSFormat, SPValue}
-import sp.websocket.HoldWithInitial
+import controllers.spcore.websocket.HoldWithInitial
 
 object WebSocketConnection {
 

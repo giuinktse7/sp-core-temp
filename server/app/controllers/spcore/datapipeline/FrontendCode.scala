@@ -1,4 +1,4 @@
-package sp.datapipeline
+package controllers.spcore.datapipeline
 
 import akka.NotUsed
 import akka.actor.ActorSystem

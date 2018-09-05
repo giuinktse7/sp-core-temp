@@ -1,8 +1,8 @@
 # Home page
-GET        /                             sp.controllers.Application.index
+GET        /                             controllers.spcore.SPCoreLaunch.index(asDependency: Boolean ?= false)
 
 # Assets
 GET        /assets/*file                 controllers.Assets.at(file)
 GET        /versionedAssets/*file        controllers.Assets.versioned(path="/public", file: Asset)
 
-->      /data                        sp.DataRouter
+->      /data                        controllers.spcore.DataRouter

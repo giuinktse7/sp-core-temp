@@ -1,4 +1,4 @@
-package sp.datapipeline
+package controllers.spcore.datapipeline
 
 import play.api.libs.json.Json
 import sp.domain.JSFormat

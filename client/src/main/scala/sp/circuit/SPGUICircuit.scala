@@ -3,7 +3,7 @@ package sp.circuit
 import diode._
 import diode.react.ReactConnector
 import org.scalajs.dom.ext.LocalStorage
-import sp.SwitchTheme
+import sp.Assets
 import sp.dashboard.{AbstractDashboardPresetsHandler, Dashboard}
 import sp.theming.SPStyleSheet.Theme
 
@@ -191,7 +191,7 @@ class WidgetDataHandler[M](modelRW: ModelRW[M, WidgetData]) extends ActionHandle
 class SettingsHandler[M](modelRW: ModelRW[M, Settings]) extends ActionHandler(modelRW) {
   override def handle = {
     case SetTheme(newTheme) => {
-      SwitchTheme.to(newTheme.name)
+      Assets.setTheme(newTheme.name)
       updated(value.copy(
         theme = newTheme
       ))
